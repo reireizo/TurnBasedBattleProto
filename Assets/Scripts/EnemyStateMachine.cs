@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
 {
+    BattleStateMachine battleManager;
     public BaseEnemy enemy;
 
     public enum TurnState
     {
         PROCESSING,
-        ADDTOLIST,
+        CHOOSEACTION,
         WAITING,
-        SELECTING,
         ACTION,
         DEAD
     }
@@ -19,9 +19,13 @@ public class EnemyStateMachine : MonoBehaviour
     float currentCooldown = 0f;
     float maxCooldown = 7f;
 
+    Vector3 startPosition;
+
     void Start()
     {
         currentState = TurnState.PROCESSING;
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();
+        startPosition = transform.position;
     }
 
     void Update()
@@ -31,13 +35,11 @@ public class EnemyStateMachine : MonoBehaviour
             case TurnState.PROCESSING:
                 UpdateProgressBar();
                 break;
-            case TurnState.ADDTOLIST:
-
+            case TurnState.CHOOSEACTION:
+                ChooseAction();
+                currentState = TurnState.WAITING;
                 break;
             case TurnState.WAITING:
-
-                break;
-            case TurnState.SELECTING:
 
                 break;
             case TurnState.ACTION:
@@ -54,7 +56,16 @@ public class EnemyStateMachine : MonoBehaviour
         currentCooldown += Time.deltaTime;
         if (currentCooldown >= maxCooldown)
         {
-            currentState = TurnState.ADDTOLIST;
+            currentState = TurnState.CHOOSEACTION;
         }
+    }
+
+    void ChooseAction()
+    {
+        HandleTurn myAttack = new HandleTurn();
+        myAttack.Attacker = enemy.name;
+        myAttack.AttacksGameObject = this.gameObject;
+        myAttack.TargetGameObject = battleManager.PlayerParty[Random.Range(0, battleManager.PlayerParty.Count)];
+        battleManager.CollectActions(myAttack);
     }
 }
