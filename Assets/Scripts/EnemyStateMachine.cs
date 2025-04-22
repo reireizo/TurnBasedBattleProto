@@ -16,10 +16,13 @@ public class EnemyStateMachine : MonoBehaviour
         DEAD
     }
     public TurnState currentState;
-    float currentCooldown = 0f;
+    [SerializeField]float currentCooldown = 0f;
     float maxCooldown = 7f;
 
     Vector3 startPosition;
+    bool actionStarted = false;
+    public GameObject targetToAttack;
+    float animSpeed = 5f;
 
     void Start()
     {
@@ -43,7 +46,7 @@ public class EnemyStateMachine : MonoBehaviour
 
                 break;
             case TurnState.ACTION:
-
+                StartCoroutine (TimeForAction());
                 break;
             case TurnState.DEAD:
 
@@ -64,8 +67,45 @@ public class EnemyStateMachine : MonoBehaviour
     {
         HandleTurn myAttack = new HandleTurn();
         myAttack.Attacker = enemy.name;
+        myAttack.Type = "Enemy";
         myAttack.AttacksGameObject = this.gameObject;
         myAttack.TargetGameObject = battleManager.PlayerParty[Random.Range(0, battleManager.PlayerParty.Count)];
         battleManager.CollectActions(myAttack);
+    }
+
+    IEnumerator TimeForAction()
+    {
+        if (actionStarted)
+        {
+            yield break;
+        }
+
+        actionStarted = true;
+        Vector3 targetPosition = new Vector3(targetToAttack.transform.position.x - 1.5f, targetToAttack.transform.position.y, targetToAttack.transform.position.z);
+        while(MoveTowardsTarget(targetPosition))
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+        //do damage
+        Vector3 firstPosition = startPosition;
+        while(MoveTowardsStart(firstPosition))
+        {
+            yield return null;
+        }
+        battleManager.PerformList.RemoveAt(0);
+        battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
+        actionStarted = false;
+        currentCooldown = 0f;
+        currentState = TurnState.PROCESSING;
+    }
+
+    bool MoveTowardsTarget(Vector3 target)
+    {
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+    bool MoveTowardsStart(Vector3 target)
+    {
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
 }

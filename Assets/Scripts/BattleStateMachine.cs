@@ -18,7 +18,6 @@ public class BattleStateMachine : MonoBehaviour
     public List<GameObject> PlayerParty = new List<GameObject>();
     public List<GameObject> EnemyParty = new List<GameObject>();
 
-    // Start is called before the first frame update
     void Start()
     {
         battleStates = PerformAction.WAIT;
@@ -26,16 +25,29 @@ public class BattleStateMachine : MonoBehaviour
         PlayerParty.AddRange(GameObject.FindGameObjectsWithTag("BattlePlayer"));
     }
 
-    // Update is called once per frame
     void Update()
     {
         switch (battleStates)
         {
             case PerformAction.WAIT:
-
+                if (PerformList.Count > 0)
+                {
+                    battleStates = PerformAction.TAKEACTION;
+                }
                 break;
             case PerformAction.TAKEACTION:
-
+                GameObject performer = GameObject.Find(PerformList[0].Attacker);
+                if (PerformList[0].Type == "Enemy")
+                {
+                    EnemyStateMachine enemyMachine = performer.GetComponent<EnemyStateMachine>();
+                    enemyMachine.targetToAttack = PerformList[0].TargetGameObject;
+                    enemyMachine.currentState = EnemyStateMachine.TurnState.ACTION;
+                }
+                if (PerformList[0].Type == "Player")
+                {
+                    
+                }
+                battleStates = PerformAction.PERFORMACTION;
                 break;
             case PerformAction.PERFORMACTION:
 
