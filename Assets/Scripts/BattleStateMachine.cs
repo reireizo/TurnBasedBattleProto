@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BattleStateMachine : MonoBehaviour
 {
@@ -11,18 +12,34 @@ public class BattleStateMachine : MonoBehaviour
         TAKEACTION,
         PERFORMACTION
     }
-
     public PerformAction battleStates;
 
     public List<HandleTurn> PerformList = new List<HandleTurn>();
     public List<GameObject> PlayerParty = new List<GameObject>();
     public List<GameObject> EnemyParty = new List<GameObject>();
 
+    public enum PlayerGUI
+    {
+        ACTIVATE,
+        WAITING,
+        INPUT1,
+        INPUT2,
+        DONE
+    }
+    public PlayerGUI playerInput;
+    public List<GameObject> playersToManage = new List<GameObject>();
+    HandleTurn PlayerChoice;
+    public GameObject targetButton;
+    public Transform spacer;
+
+
     void Start()
     {
         battleStates = PerformAction.WAIT;
         EnemyParty.AddRange(GameObject.FindGameObjectsWithTag("BattleEnemy"));
         PlayerParty.AddRange(GameObject.FindGameObjectsWithTag("BattlePlayer"));
+
+        TargetButtons();
     }
 
     void Update()
@@ -58,5 +75,21 @@ public class BattleStateMachine : MonoBehaviour
     public void CollectActions(HandleTurn input)
     {
         PerformList.Add(input);
+    }
+
+    void TargetButtons()
+    {
+        foreach(GameObject enemy in EnemyParty)
+        {
+            GameObject newButton = Instantiate(targetButton, spacer);
+            TargetButton button = newButton.GetComponent<TargetButton>();
+
+            EnemyStateMachine currentEnemy = enemy.GetComponent<EnemyStateMachine>();
+
+            TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
+            buttonText.text = currentEnemy.enemy.name;
+
+            button.TargetObject = enemy;
+        }
     }
 }

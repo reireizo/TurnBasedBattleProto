@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerStateMachine : MonoBehaviour
 {
+    BattleStateMachine battleManager;
     public BasePlayer player;
 
     public enum TurnState
@@ -13,7 +14,6 @@ public class PlayerStateMachine : MonoBehaviour
         PROCESSING,
         ADDTOLIST,
         WAITING,
-        SELECTING,
         ACTION,
         DEAD
     }
@@ -25,6 +25,7 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         currentState = TurnState.PROCESSING;
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();
     }
 
     void Update()
@@ -35,12 +36,10 @@ public class PlayerStateMachine : MonoBehaviour
                 UpdateProgressBar();
                 break;
             case TurnState.ADDTOLIST:
-
+                battleManager.playersToManage.Add(this.gameObject);
+                currentState = TurnState.WAITING;
                 break;
             case TurnState.WAITING:
-
-                break;
-            case TurnState.SELECTING:
 
                 break;
             case TurnState.ACTION:
