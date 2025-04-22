@@ -6,8 +6,8 @@ public class TargetButton : MonoBehaviour
 {
     public GameObject TargetObject;
     
-    void SelectTarget()
+    public void SelectTarget()
     {
-        GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();
+        GameObject.Find("BattleManager").GetComponent<BattleStateMachine>().TargetInput(TargetObject);
     }
 }

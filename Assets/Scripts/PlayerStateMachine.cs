@@ -21,9 +21,18 @@ public class PlayerStateMachine : MonoBehaviour
     float currentCooldown = 0f;
     float maxCooldown = 5f;
     public Image ProgressBar;
+    public GameObject selector;
+
+    public GameObject targetToAttack;
+    bool actionStarted = false;
+    Vector3 startPosition;
+    float animSpeed = 10f;
 
     void Start()
     {
+        startPosition = transform.position;
+        currentCooldown = UnityEngine.Random.Range(0f, 0.25f);
+        selector.SetActive(false);
         currentState = TurnState.PROCESSING;
         battleManager = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();
     }
@@ -43,7 +52,7 @@ public class PlayerStateMachine : MonoBehaviour
 
                 break;
             case TurnState.ACTION:
-
+                StartCoroutine(TimeForAction());
                 break;
             case TurnState.DEAD:
 
@@ -60,5 +69,41 @@ public class PlayerStateMachine : MonoBehaviour
         {
             currentState = TurnState.ADDTOLIST;
         }
+    }
+
+    IEnumerator TimeForAction()
+    {
+        if (actionStarted)
+        {
+            yield break;
+        }
+
+        actionStarted = true;
+        Vector3 targetPosition = new Vector3(targetToAttack.transform.position.x + 1.5f, targetToAttack.transform.position.y, targetToAttack.transform.position.z);
+        while(MoveTowardsTarget(targetPosition))
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+        //do damage
+        Vector3 firstPosition = startPosition;
+        while(MoveTowardsStart(firstPosition))
+        {
+            yield return null;
+        }
+        battleManager.PerformList.RemoveAt(0);
+        battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
+        actionStarted = false;
+        currentCooldown = 0f;
+        currentState = TurnState.PROCESSING;
+    }
+
+    bool MoveTowardsTarget(Vector3 target)
+    {
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+    bool MoveTowardsStart(Vector3 target)
+    {
+        return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
 }

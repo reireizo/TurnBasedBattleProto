@@ -32,12 +32,19 @@ public class BattleStateMachine : MonoBehaviour
     public GameObject targetButton;
     public Transform spacer;
 
+    public GameObject AttackPanel;
+    public GameObject TargetPanel;
+
 
     void Start()
     {
         battleStates = PerformAction.WAIT;
+        playerInput = PlayerGUI.ACTIVATE;
         EnemyParty.AddRange(GameObject.FindGameObjectsWithTag("BattleEnemy"));
         PlayerParty.AddRange(GameObject.FindGameObjectsWithTag("BattlePlayer"));
+
+        AttackPanel.SetActive(false);
+        TargetPanel.SetActive(false);
 
         TargetButtons();
     }
@@ -62,12 +69,33 @@ public class BattleStateMachine : MonoBehaviour
                 }
                 if (PerformList[0].Type == "Player")
                 {
-                    
+                    PlayerStateMachine playerMachine = performer.GetComponent<PlayerStateMachine>();
+                    playerMachine.targetToAttack = PerformList[0].TargetGameObject;
+                    playerMachine.currentState = PlayerStateMachine.TurnState.ACTION;
                 }
                 battleStates = PerformAction.PERFORMACTION;
                 break;
             case PerformAction.PERFORMACTION:
 
+                break;
+        }
+
+        switch (playerInput)
+        {
+            case PlayerGUI.ACTIVATE:
+                if(playersToManage.Count > 0)
+                {
+                    playersToManage[0].transform.Find("Selector").gameObject.SetActive(true);
+                    PlayerChoice = new HandleTurn();
+                    AttackPanel.SetActive(true);
+                    playerInput = PlayerGUI.WAITING;
+                }
+                break;
+            case PlayerGUI.WAITING:
+
+                break;
+            case PlayerGUI.DONE:
+                PlayerInputDone();
                 break;
         }
     }
@@ -91,5 +119,30 @@ public class BattleStateMachine : MonoBehaviour
 
             button.TargetObject = enemy;
         }
+    }
+
+    public void AttackInput()
+    {
+        PlayerChoice.Attacker = playersToManage[0].name;
+        PlayerChoice.AttacksGameObject = playersToManage[0];
+        PlayerChoice.Type = "Player";
+
+        AttackPanel.SetActive(false);
+        TargetPanel.SetActive(true);
+    }
+
+    public void TargetInput(GameObject chosenEnemy)
+    {
+        PlayerChoice.TargetGameObject = chosenEnemy;
+        playerInput = PlayerGUI.DONE;
+    }
+
+    void PlayerInputDone()
+    {
+        PerformList.Add(PlayerChoice);
+        TargetPanel.SetActive(false);
+        playersToManage[0].transform.Find("Selector").gameObject.SetActive(false);
+        playersToManage.RemoveAt(0);
+        playerInput = PlayerGUI.ACTIVATE;
     }
 }

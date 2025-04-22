@@ -22,7 +22,7 @@ public class EnemyStateMachine : MonoBehaviour
     Vector3 startPosition;
     bool actionStarted = false;
     public GameObject targetToAttack;
-    float animSpeed = 5f;
+    float animSpeed = 10f;
 
     void Start()
     {
