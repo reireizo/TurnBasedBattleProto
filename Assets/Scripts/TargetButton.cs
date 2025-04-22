@@ -10,4 +10,13 @@ public class TargetButton : MonoBehaviour
     {
         GameObject.Find("BattleManager").GetComponent<BattleStateMachine>().TargetInput(TargetObject);
     }
+
+    public void HideSelector()
+    {
+        TargetObject.transform.Find("Selector").gameObject.SetActive(false);
+    }
+    public void ShowSelector()
+    {
+        TargetObject.transform.Find("Selector").gameObject.SetActive(true);
+    }
 }

@@ -18,6 +18,7 @@ public class EnemyStateMachine : MonoBehaviour
     public TurnState currentState;
     [SerializeField]float currentCooldown = 0f;
     float maxCooldown = 7f;
+    public GameObject selector;
 
     Vector3 startPosition;
     bool actionStarted = false;
@@ -26,6 +27,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     void Start()
     {
+        selector.SetActive(false);
         currentState = TurnState.PROCESSING;
         battleManager = GameObject.Find("BattleManager").GetComponent<BattleStateMachine>();
         startPosition = transform.position;
@@ -66,7 +68,7 @@ public class EnemyStateMachine : MonoBehaviour
     void ChooseAction()
     {
         HandleTurn myAttack = new HandleTurn();
-        myAttack.Attacker = enemy.name;
+        myAttack.Attacker = enemy.actorName;
         myAttack.Type = "Enemy";
         myAttack.AttacksGameObject = this.gameObject;
         myAttack.TargetGameObject = battleManager.PlayerParty[Random.Range(0, battleManager.PlayerParty.Count)];

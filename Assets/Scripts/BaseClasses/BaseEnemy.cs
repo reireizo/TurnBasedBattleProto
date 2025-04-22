@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BaseEnemy
+public class BaseEnemy: BaseClass
 {
-    public string name;
-
     public enum Type
     {
         FIRE,
@@ -26,15 +24,4 @@ public class BaseEnemy
 
     public Type enemyType;
     public Rarity rarity;
-
-    public float maxHP;
-    public float currentHP;
-
-    public float maxMP;
-    public float currentMP;
-
-    public float baseATK;
-    public float curATK;
-    public float baseDEF;
-    public float curDEF;
 }
