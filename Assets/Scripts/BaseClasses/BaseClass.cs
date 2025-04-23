@@ -20,4 +20,6 @@ public class BaseClass
     public float currentDEF;
     public float baseMDF;
     public float currentMDF;
+
+    public List<BaseAttack> AttackList = new List<BaseAttack>();
 }

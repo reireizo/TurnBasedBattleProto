@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18400002, y: 0}
   m_AnchorMax: {x: 0.39100003, y: 0.321}
-  m_AnchoredPosition: {x: -0.06500244, y: -0.0014648438}
+  m_AnchoredPosition: {x: -0.064941406, y: -0.0014648438}
   m_SizeDelta: {x: -0.13000107, y: 0.0028381348}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &113287914
@@ -838,7 +838,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18400002, y: 0}
   m_AnchorMax: {x: 0.39100003, y: 0.321}
-  m_AnchoredPosition: {x: -0.06500244, y: -0.0014648438}
+  m_AnchoredPosition: {x: -0.064941406, y: -0.0014648438}
   m_SizeDelta: {x: -0.13000107, y: 0.0028381348}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &840621284
@@ -1092,6 +1092,14 @@ PrefabInstance:
       propertyPath: enemy.currentMDF
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.AttackList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.AttackList.Array.data[0]
+      value: 
+      objectReference: {fileID: 1836543151596916923, guid: eee14cb3f9b506248afdf18af7ac921f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1692,6 +1700,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4614020794192765543, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.05041504
+      objectReference: {fileID: 0}
     - target: {fileID: 6141094696735542180, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_Name
       value: PlayerBar 2
@@ -1702,7 +1714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8622028245245416599, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.23299217
+      value: -0.23299026
       objectReference: {fileID: 0}
     - target: {fileID: 8991076733001963815, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2222,6 +2234,18 @@ PrefabInstance:
       propertyPath: enemy.currentMDF
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.AttackList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.AttackList.Array.data[0]
+      value: 
+      objectReference: {fileID: 3374088940131865936, guid: 7d3508454b6d9e14da20baba3cff8112, type: 3}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.AttackList.Array.data[1]
+      value: 
+      objectReference: {fileID: 1836543151596916923, guid: eee14cb3f9b506248afdf18af7ac921f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2335,6 +2359,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4614020794192765543, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.05041504
+      objectReference: {fileID: 0}
     - target: {fileID: 6141094696735542180, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_Name
       value: PlayerBar 1
@@ -2344,8 +2372,12 @@ PrefabInstance:
       value: 0.00016021729
       objectReference: {fileID: 0}
     - target: {fileID: 8622028245245416599, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.2972412
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622028245245416599, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.23299599
+      value: -0.23299408
       objectReference: {fileID: 0}
     - target: {fileID: 8991076733001963815, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
       propertyPath: m_AnchoredPosition.x

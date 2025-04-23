@@ -72,6 +72,11 @@ public class EnemyStateMachine : MonoBehaviour
         myAttack.Type = "Enemy";
         myAttack.AttacksGameObject = this.gameObject;
         myAttack.TargetGameObject = battleManager.PlayerParty[Random.Range(0, battleManager.PlayerParty.Count)];
+
+        int num = Random.Range(0, enemy.AttackList.Count);
+        myAttack.ChosenAttack = enemy.AttackList[num];
+        Debug.Log(this.gameObject.name + " has chosen " + myAttack.ChosenAttack.attackName + " on " + myAttack.TargetGameObject.name);
+
         battleManager.CollectActions(myAttack);
     }
 
@@ -89,7 +94,7 @@ public class EnemyStateMachine : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(0.5f);
-        //do damage
+        DoDamage(battleManager.PerformList[0].ChosenAttack);
         Vector3 firstPosition = startPosition;
         while(MoveTowardsStart(firstPosition))
         {
@@ -109,5 +114,14 @@ public class EnemyStateMachine : MonoBehaviour
     bool MoveTowardsStart(Vector3 target)
     {
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
+    }
+
+    void DoDamage(BaseAttack usedAttack)
+    {
+        PlayerStateMachine targetPlayer = targetToAttack.GetComponent<PlayerStateMachine>();
+        float baseDamage = enemy.currentATK - (targetPlayer.player.currentDEF /2);
+        float damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
+        float finalDamage = damageSkillModded * (10f / targetPlayer.player.vitality);
+        targetPlayer.TakeDamage(finalDamage);
     }
 }

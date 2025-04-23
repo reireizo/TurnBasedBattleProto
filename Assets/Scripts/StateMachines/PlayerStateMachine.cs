@@ -106,4 +106,14 @@ public class PlayerStateMachine : MonoBehaviour
     {
         return target != (transform.position = Vector3.MoveTowards(transform.position, target, animSpeed * Time.deltaTime));
     }
+
+    public void TakeDamage(float getDamageAmount)
+    {
+        player.currentHP -= getDamageAmount;
+        Debug.Log(player.actorName + " has taken " + getDamageAmount + " damage!");
+        if (player.currentHP <= 0)
+        {
+            currentState = TurnState.DEAD;
+        }
+    }
 }
