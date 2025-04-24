@@ -133,11 +133,13 @@ MonoBehaviour:
     currentDEF: 50
     baseMDF: 50
     currentMDF: 50
+    AttackList: []
     strength: 15
     magic: 5
     vitality: 15
     agility: 10
   currentState: 0
+  PlayerPanel: {fileID: 6141094696735542180, guid: 0b6053d4c1e22cf42a3ae0b9383cca36, type: 3}
   ProgressBar: {fileID: 0}
   selector: {fileID: 3931646228779943356}
   targetToAttack: {fileID: 0}

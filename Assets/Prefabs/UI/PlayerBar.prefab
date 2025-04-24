@@ -184,7 +184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.023101047, y: 0.23386511}
   m_AnchorMax: {x: 0.25789896, y: 0.76613486}
-  m_AnchoredPosition: {x: 0.29730225, y: -0.23299599}
+  m_AnchoredPosition: {x: 0.29730225, y: -0.2329979}
   m_SizeDelta: {x: -0.595, y: -0.46599}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &668182849471258924
@@ -432,7 +432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.45549482, y: 0.18632884}
   m_AnchorMax: {x: 0.56130314, y: 0.8343289}
-  m_AnchoredPosition: {x: -0.0500412, y: 0.00002861023}
+  m_AnchoredPosition: {x: -0.0500412, y: 0.000030517578}
   m_SizeDelta: {x: -0.0999, y: -0.0000038147}
   m_Pivot: {x: 0.50000006, y: 0.5}
 --- !u!1 &4263639676416744189
@@ -918,6 +918,8 @@ GameObject:
   - component: {fileID: 3619060219792468289}
   - component: {fileID: 8949296520780891596}
   - component: {fileID: 6298466262329376316}
+  - component: {fileID: 1590222133346840712}
+  - component: {fileID: -8959123194666702705}
   m_Layer: 5
   m_Name: PlayerBar
   m_TagString: Untagged
@@ -986,6 +988,44 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1590222133346840712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141094696735542180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 80
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
+--- !u!114 &-8959123194666702705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141094696735542180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec306ffb6467174bbffa850e553c370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: {fileID: 2349404335832900131}
+  playerHP: {fileID: 8220566321595024264}
+  playerMP: {fileID: 3459972456662666383}
+  playerHPImage: {fileID: 229869642728165637}
+  playerMPImage: {fileID: 1268928991284842816}
+  playerProgressImage: {fileID: 7569666629727986107}
 --- !u!1 &8685730163581192206
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,7 +21,12 @@ public class PlayerStateMachine : MonoBehaviour
     public TurnState currentState;
     float currentCooldown = 0f;
     float maxCooldown = 5f;
+
+    PlayerPanelStats stats;
+    public GameObject PlayerPanel;
+    Transform playerPanelSpacer;
     public Image ProgressBar;
+
     public GameObject selector;
 
     public GameObject targetToAttack;
@@ -33,6 +38,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Start()
     {
+        playerPanelSpacer = GameObject.Find("BattleCanvas").transform.Find("PlayerPanel").Find("Spacer");
+        CreatePlayerPanel();
         startPosition = transform.position;
         currentCooldown = UnityEngine.Random.Range(0f, 0.25f);
         selector.SetActive(false);
@@ -136,9 +143,35 @@ public class PlayerStateMachine : MonoBehaviour
     {
         player.currentHP -= getDamageAmount;
         Debug.Log(player.actorName + " has taken " + getDamageAmount + " damage!");
+        UpdateHPBar();
         if (player.currentHP <= 0)
         {
+            player.currentHP = 0;
             currentState = TurnState.DEAD;
         }
+    }
+
+    void CreatePlayerPanel()
+    {
+        PlayerPanel = Instantiate(PlayerPanel, playerPanelSpacer);
+        stats = PlayerPanel.GetComponent<PlayerPanelStats>();
+        stats.playerName.text = player.actorName;
+        UpdateHPBar();
+        UpdateMPBar();
+        ProgressBar = stats.playerProgressImage;
+    }
+
+    void UpdateHPBar()
+    {
+        stats.playerHP.text = player.currentHP.ToString();
+        float percentHP = player.currentHP / player.maxHP;
+        stats.playerHPImage.transform.localScale = new Vector3(Mathf.Clamp(percentHP, 0, 1), stats.playerHPImage.transform.localScale.y, stats.playerHPImage.transform.localScale.z);
+    }
+
+    void UpdateMPBar()
+    {
+        stats.playerMP.text = player.currentMP.ToString();
+        float percentMP = player.currentMP / player.maxMP;
+        stats.playerMPImage.transform.localScale = new Vector3(Mathf.Clamp(percentMP, 0, 1), stats.playerMPImage.transform.localScale.y, stats.playerMPImage.transform.localScale.z);
     }
 }
