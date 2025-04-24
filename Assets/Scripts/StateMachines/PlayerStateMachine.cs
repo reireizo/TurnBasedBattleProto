@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,8 @@ public class PlayerStateMachine : MonoBehaviour
     bool actionStarted = false;
     Vector3 startPosition;
     float animSpeed = 10f;
+
+    bool alive = true;
 
     void Start()
     {
@@ -55,7 +58,29 @@ public class PlayerStateMachine : MonoBehaviour
                 StartCoroutine(TimeForAction());
                 break;
             case TurnState.DEAD:
-
+                if (!alive)
+                {
+                    return;
+                }
+                else
+                {
+                    this.gameObject.tag = "DeadPlayer";
+                    battleManager.PlayerParty.Remove(this.gameObject);
+                    battleManager.playersToManage.Remove(this.gameObject);
+                    selector.SetActive(false);
+                    battleManager.AttackPanel.SetActive(false);
+                    battleManager.TargetPanel.SetActive(false);
+                    for(int i = 0; i < battleManager.PerformList.Count; i++)
+                    {
+                        if(battleManager.PerformList[i].AttacksGameObject == this.gameObject)
+                        {
+                            battleManager.PerformList.Remove(battleManager.PerformList[i]);
+                        }
+                    }
+                    this.gameObject.GetComponent<MeshRenderer>().material.color = new Color32(105, 105, 105, 255);
+                    battleManager.playerInput = BattleStateMachine.PlayerGUI.ACTIVATE;
+                    alive = false;
+                }
                 break;
         }
     }

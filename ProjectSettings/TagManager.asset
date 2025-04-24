@@ -6,6 +6,8 @@ TagManager:
   tags:
   - BattlePlayer
   - BattleEnemy
+  - DeadPlayer
+  - DeadEnemy
   layers:
   - Default
   - TransparentFX
