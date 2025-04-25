@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BattleStateMachine : MonoBehaviour
@@ -30,10 +31,17 @@ public class BattleStateMachine : MonoBehaviour
     public List<GameObject> playersToManage = new List<GameObject>();
     HandleTurn PlayerChoice;
     public GameObject targetButton;
-    public Transform spacer;
+    public Transform targetSpacer;
+    public Transform actionSpacer;
+    public Transform magicSpacer;
 
     public GameObject AttackPanel;
     public GameObject TargetPanel;
+    public GameObject MagicPanel;
+
+    public GameObject actionButton;
+
+    //public List<GameObject> AttackButtons = new List<GameObject>();
 
 
     void Start()
@@ -43,8 +51,11 @@ public class BattleStateMachine : MonoBehaviour
         EnemyParty.AddRange(GameObject.FindGameObjectsWithTag("BattleEnemy"));
         PlayerParty.AddRange(GameObject.FindGameObjectsWithTag("BattlePlayer"));
 
+        CreateAttackButtons();
+
         AttackPanel.SetActive(false);
         TargetPanel.SetActive(false);
+        MagicPanel.SetActive(false);
 
         TargetButtons();
     }
@@ -127,7 +138,7 @@ public class BattleStateMachine : MonoBehaviour
     {
         foreach(GameObject enemy in EnemyParty)
         {
-            GameObject newButton = Instantiate(targetButton, spacer);
+            GameObject newButton = Instantiate(targetButton, targetSpacer);
             TargetButton button = newButton.GetComponent<TargetButton>();
 
             EnemyStateMachine currentEnemy = enemy.GetComponent<EnemyStateMachine>();
@@ -162,5 +173,19 @@ public class BattleStateMachine : MonoBehaviour
         playersToManage[0].transform.Find("Selector").gameObject.SetActive(false);
         playersToManage.RemoveAt(0);
         playerInput = PlayerGUI.ACTIVATE;
+    }
+
+    void CreateAttackButtons()
+    {
+        GameObject AttackButton = Instantiate(actionButton, actionSpacer);
+        TMP_Text AttackButtonText = AttackButton.transform.Find("ActionText").GetComponent<TMP_Text>();
+        AttackButtonText.text = "Attack";
+        AttackButton.GetComponent<Button>().onClick.AddListener(() => AttackInput());
+        //AttackButtons.Add(AttackButton);
+
+        GameObject MagicButton = Instantiate(actionButton, actionSpacer);
+        TMP_Text MagicButtonText = AttackButton.transform.Find("ActionText").GetComponent<TMP_Text>();
+        AttackButtonText.text = "Magic";
+        //AttackButton.GetComponent<Button>().onClick.AddListener(() => AttackInput());
     }
 }
