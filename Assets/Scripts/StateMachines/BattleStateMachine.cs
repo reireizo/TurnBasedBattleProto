@@ -135,6 +135,7 @@ public class BattleStateMachine : MonoBehaviour
                 {
                     PlayerStateMachine playerMachine = alivePlayer.GetComponent<PlayerStateMachine>();
                     playerMachine.currentState = PlayerStateMachine.TurnState.WAITING;
+                    GameManager.Instance.LoadMainMenu();
                 }
                 break;
             case PerformAction.LOSE:
@@ -143,6 +144,7 @@ public class BattleStateMachine : MonoBehaviour
                 {
                     EnemyStateMachine playerMachine = aliveEnemy.GetComponent<EnemyStateMachine>();
                     playerMachine.currentState = EnemyStateMachine.TurnState.WAITING;
+                    GameManager.Instance.LoadMainMenu();
                 }
                 break;
         }

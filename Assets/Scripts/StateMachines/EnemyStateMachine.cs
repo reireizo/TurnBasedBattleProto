@@ -158,15 +158,15 @@ public class EnemyStateMachine : MonoBehaviour
         switch(usedAttack.attackType)
         {
             case BaseAttack.StatType.PHYS:
-                baseDamage = enemy.currentATK - (targetPlayer.player.currentDEF /2);
-                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
-                finalDamage = damageSkillModded * (10f / targetPlayer.player.vitality);
+                baseDamage = Mathf.Floor(enemy.currentATK - (targetPlayer.player.currentDEF /2));
+                damageSkillModded = Mathf.Floor(baseDamage * (usedAttack.attackDamage / 100f));
+                finalDamage = Mathf.Floor(damageSkillModded * (10f / targetPlayer.player.vitality));
                 targetPlayer.TakeDamage(finalDamage);
                 break;
             case BaseAttack.StatType.MAGIC:
-                baseDamage = enemy.currentMAT - (targetPlayer.player.currentMDF /2);
-                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
-                finalDamage = damageSkillModded * (10f / targetPlayer.player.magic);
+                baseDamage = Mathf.Floor(enemy.currentMAT - (targetPlayer.player.currentMDF /2));
+                damageSkillModded = Mathf.Floor(baseDamage * (usedAttack.attackDamage / 100f));
+                finalDamage = Mathf.Floor(damageSkillModded * (10f / targetPlayer.player.magic));
                 targetPlayer.TakeDamage(finalDamage);
                 break;
         }
