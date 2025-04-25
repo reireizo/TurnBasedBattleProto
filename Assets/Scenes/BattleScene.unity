@@ -553,7 +553,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 128551298469367155, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_Name
-      value: Player 2
+      value: Player 1
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.35
+      value: 1.35
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -641,7 +641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: player.actorName
-      value: Player 2
+      value: Player 1
       objectReference: {fileID: 0}
     - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: player.currentHP
@@ -667,6 +667,22 @@ PrefabInstance:
       propertyPath: player.currentMDF
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.AttackList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.knownSpells.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.AttackList.Array.data[0]
+      value: 
+      objectReference: {fileID: 3374088940131865936, guid: 7d3508454b6d9e14da20baba3cff8112, type: 3}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.knownSpells.Array.data[0]
+      value: 
+      objectReference: {fileID: 6447433363572719539, guid: a336df5db1f44d142a300d911639536f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1354,7 +1370,8 @@ MonoBehaviour:
   TargetPanel: {fileID: 113287912}
   MagicPanel: {fileID: 1736595846}
   actionButton: {fileID: 2735808073124206656, guid: d28b5ea287097dc4ab143d5312b44de1, type: 3}
-  AttackButtons: []
+  magicButton: {fileID: 2735808073124206656, guid: d5dad89df0092fc45aa4ccd3664732c6, type: 3}
+  MagicButtons: []
 --- !u!4 &1800068385
 Transform:
   m_ObjectHideFlags: 0
@@ -1635,8 +1652,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1684159629}
   - {fileID: 490854144}
+  - {fileID: 1684159629}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2075093382 stripped
@@ -1654,7 +1671,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 128551298469367155, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_Name
-      value: Player 1
+      value: Player 2
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1666,7 +1683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3500001
+      value: -1.35
       objectReference: {fileID: 0}
     - target: {fileID: 1715586314128308443, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1742,7 +1759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: player.actorName
-      value: Player 1
+      value: Player 2
       objectReference: {fileID: 0}
     - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
       propertyPath: player.currentHP
@@ -1768,6 +1785,22 @@ PrefabInstance:
       propertyPath: player.currentMDF
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.AttackList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.knownSpells.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.AttackList.Array.data[0]
+      value: 
+      objectReference: {fileID: 1836543151596916923, guid: eee14cb3f9b506248afdf18af7ac921f, type: 3}
+    - target: {fileID: 3703111500601460867, guid: aea140e22995e6d4fa7b4add94c7288e, type: 3}
+      propertyPath: player.knownSpells.Array.data[0]
+      value: 
+      objectReference: {fileID: 1902034060278857360, guid: 968d919dac324b94cb07c9a85a839c8d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1844,6 +1877,10 @@ PrefabInstance:
     - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
       propertyPath: enemy.actorName
       value: Enemy 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
+      propertyPath: enemy.currentHP
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3626335819754036372, guid: 10aca01051892b74cb50e520ed4c2a57, type: 3}
       propertyPath: enemy.currentATK

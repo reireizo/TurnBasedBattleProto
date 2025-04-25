@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 
 public class EnemyStateMachine : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class EnemyStateMachine : MonoBehaviour
     bool actionStarted = false;
     public GameObject targetToAttack;
     float animSpeed = 10f;
+    bool alive = true;
 
     void Start()
     {
@@ -51,7 +53,35 @@ public class EnemyStateMachine : MonoBehaviour
                 StartCoroutine (TimeForAction());
                 break;
             case TurnState.DEAD:
+                if (!alive)
+                {
+                    return;
+                }
+                else
+                {
+                    this.gameObject.tag = "DeadEnemy";
+                    battleManager.EnemyParty.Remove(this.gameObject);
+                    selector.SetActive(false);
+                    if (battleManager.EnemyParty.Count > 0)
+                    {
+                        for(int i = 0; i < battleManager.PerformList.Count; i++)
+                        {
+                            if(battleManager.PerformList[i].AttacksGameObject == this.gameObject)
+                            {
+                                battleManager.PerformList.Remove(battleManager.PerformList[i]);
+                            }
+                            if(battleManager.PerformList[i].TargetGameObject == this.gameObject)
+                            {
+                                battleManager.PerformList[i].TargetGameObject = battleManager.EnemyParty[UnityEngine.Random.Range(0, battleManager.EnemyParty.Count)];
+                            }
+                        }
+                    }
+                    this.gameObject.GetComponent<MeshRenderer>().material.color = new Color32(105, 105, 105, 255);
+                    battleManager.CreateTargetButtons();
+                    battleManager.battleStates = BattleStateMachine.PerformAction.CHECKALIVE;
+                    alive = false;
 
+                }
                 break;
         }
     }
@@ -100,11 +130,14 @@ public class EnemyStateMachine : MonoBehaviour
         {
             yield return null;
         }
-        battleManager.PerformList.RemoveAt(0);
-        battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
-        actionStarted = false;
-        currentCooldown = 0f;
-        currentState = TurnState.PROCESSING;
+        if (battleManager.battleStates != BattleStateMachine.PerformAction.LOSE)
+        {
+            battleManager.PerformList.RemoveAt(0);
+            battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
+            actionStarted = false;
+            currentCooldown = 0f;
+            currentState = TurnState.PROCESSING;
+        }
     }
 
     bool MoveTowardsTarget(Vector3 target)
@@ -119,9 +152,34 @@ public class EnemyStateMachine : MonoBehaviour
     void DoDamage(BaseAttack usedAttack)
     {
         PlayerStateMachine targetPlayer = targetToAttack.GetComponent<PlayerStateMachine>();
-        float baseDamage = enemy.currentATK - (targetPlayer.player.currentDEF /2);
-        float damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
-        float finalDamage = damageSkillModded * (10f / targetPlayer.player.vitality);
-        targetPlayer.TakeDamage(finalDamage);
+        float baseDamage;
+        float damageSkillModded;
+        float finalDamage;
+        switch(usedAttack.attackType)
+        {
+            case BaseAttack.StatType.PHYS:
+                baseDamage = enemy.currentATK - (targetPlayer.player.currentDEF /2);
+                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
+                finalDamage = damageSkillModded * (10f / targetPlayer.player.vitality);
+                targetPlayer.TakeDamage(finalDamage);
+                break;
+            case BaseAttack.StatType.MAGIC:
+                baseDamage = enemy.currentMAT - (targetPlayer.player.currentMDF /2);
+                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
+                finalDamage = damageSkillModded * (10f / targetPlayer.player.magic);
+                targetPlayer.TakeDamage(finalDamage);
+                break;
+        }
+    }
+
+    public void TakeDamage(float getDamageAmount)
+    {
+        enemy.currentHP -= getDamageAmount;
+        Debug.Log(enemy.actorName + " has taken " + getDamageAmount + " damage!");
+        if (enemy.currentHP <= 0)
+        {
+            enemy.currentHP = 0;
+            currentState = TurnState.DEAD;
+        }
     }
 }

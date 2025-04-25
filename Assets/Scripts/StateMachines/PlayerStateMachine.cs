@@ -73,19 +73,31 @@ public class PlayerStateMachine : MonoBehaviour
                 {
                     this.gameObject.tag = "DeadPlayer";
                     battleManager.PlayerParty.Remove(this.gameObject);
+                    if (this.gameObject == battleManager.playersToManage[0])
+                    {
+                        battleManager.ClearMagicPanel();
+                    }
                     battleManager.playersToManage.Remove(this.gameObject);
                     selector.SetActive(false);
                     battleManager.AttackPanel.SetActive(false);
+                    battleManager.MagicPanel.SetActive(false);
                     battleManager.TargetPanel.SetActive(false);
-                    for(int i = 0; i < battleManager.PerformList.Count; i++)
+                    if (battleManager.PlayerParty.Count > 0)
                     {
-                        if(battleManager.PerformList[i].AttacksGameObject == this.gameObject)
+                        for(int i = 0; i < battleManager.PerformList.Count; i++)
                         {
-                            battleManager.PerformList.Remove(battleManager.PerformList[i]);
+                            if(battleManager.PerformList[i].AttacksGameObject == this.gameObject)
+                            {
+                                battleManager.PerformList.Remove(battleManager.PerformList[i]);
+                            }
+                            if(battleManager.PerformList[i].TargetGameObject == this.gameObject)
+                            {
+                                battleManager.PerformList[i].TargetGameObject = battleManager.PlayerParty[UnityEngine.Random.Range(0, battleManager.PlayerParty.Count)];
+                            }
                         }
                     }
                     this.gameObject.GetComponent<MeshRenderer>().material.color = new Color32(105, 105, 105, 255);
-                    battleManager.playerInput = BattleStateMachine.PlayerGUI.ACTIVATE;
+                    battleManager.battleStates = BattleStateMachine.PerformAction.CHECKALIVE;
                     alive = false;
                 }
                 break;
@@ -117,17 +129,20 @@ public class PlayerStateMachine : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(0.5f);
-        //do damage
+        DoDamage(battleManager.PerformList[0].ChosenAttack);
         Vector3 firstPosition = startPosition;
         while(MoveTowardsStart(firstPosition))
         {
             yield return null;
         }
-        battleManager.PerformList.RemoveAt(0);
-        battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
-        actionStarted = false;
-        currentCooldown = 0f;
-        currentState = TurnState.PROCESSING;
+        if (battleManager.battleStates != BattleStateMachine.PerformAction.WIN)
+        {
+            battleManager.PerformList.RemoveAt(0);
+            battleManager.battleStates = BattleStateMachine.PerformAction.WAIT;
+            actionStarted = false;
+            currentCooldown = 0f;
+            currentState = TurnState.PROCESSING;
+        }
     }
 
     bool MoveTowardsTarget(Vector3 target)
@@ -143,12 +158,12 @@ public class PlayerStateMachine : MonoBehaviour
     {
         player.currentHP -= getDamageAmount;
         Debug.Log(player.actorName + " has taken " + getDamageAmount + " damage!");
-        UpdateHPBar();
         if (player.currentHP <= 0)
         {
             player.currentHP = 0;
             currentState = TurnState.DEAD;
         }
+        UpdateHPBar();
     }
 
     void CreatePlayerPanel()
@@ -173,5 +188,28 @@ public class PlayerStateMachine : MonoBehaviour
         stats.playerMP.text = player.currentMP.ToString();
         float percentMP = player.currentMP / player.maxMP;
         stats.playerMPImage.transform.localScale = new Vector3(Mathf.Clamp(percentMP, 0, 1), stats.playerMPImage.transform.localScale.y, stats.playerMPImage.transform.localScale.z);
+    }
+
+    void DoDamage(BaseAttack usedAttack)
+    {
+        EnemyStateMachine targetEnemy = targetToAttack.GetComponent<EnemyStateMachine>();
+        float baseDamage;
+        float damageSkillModded;
+        float finalDamage;
+        switch(usedAttack.attackType)
+        {
+            case BaseAttack.StatType.PHYS:
+                baseDamage = player.currentATK - (targetEnemy.enemy.currentDEF /2);
+                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
+                finalDamage = damageSkillModded * (player.strength / 10f);
+                targetEnemy.TakeDamage(finalDamage);
+                break;
+            case BaseAttack.StatType.MAGIC:
+                baseDamage = player.currentMAT - (targetEnemy.enemy.currentMDF /2);
+                damageSkillModded = baseDamage * (usedAttack.attackDamage / 100f);
+                finalDamage = damageSkillModded * (player.magic / 10f);
+                targetEnemy.TakeDamage(finalDamage);
+                break;
+        }
     }
 }

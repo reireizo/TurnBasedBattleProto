@@ -9,6 +9,7 @@ public class Slash : BaseAttack
     {
         attackName = "Slash";
         attackDescription = "Normal Slash attack, normal damage";
+        attackType = StatType.PHYS;
         attackCost = 0f;
         attackDamage = 100f;
     }

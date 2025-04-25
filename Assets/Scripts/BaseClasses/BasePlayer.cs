@@ -9,4 +9,6 @@ public class BasePlayer: BaseClass
     public int magic;
     public int vitality;
     public int agility;
+
+    public List<BaseAttack> knownSpells = new List<BaseAttack>();
 }

@@ -11,7 +11,10 @@ public class BattleStateMachine : MonoBehaviour
     {
         WAIT,
         TAKEACTION,
-        PERFORMACTION
+        PERFORMACTION,
+        CHECKALIVE,
+        WIN,
+        LOSE
     }
     public PerformAction battleStates;
 
@@ -40,8 +43,11 @@ public class BattleStateMachine : MonoBehaviour
     public GameObject MagicPanel;
 
     public GameObject actionButton;
+    public GameObject magicButton;
 
     //public List<GameObject> AttackButtons = new List<GameObject>();
+    public List<GameObject> MagicButtons = new List<GameObject>();
+    public List<GameObject> TargetButtons = new List<GameObject>();
 
 
     void Start()
@@ -57,7 +63,7 @@ public class BattleStateMachine : MonoBehaviour
         TargetPanel.SetActive(false);
         MagicPanel.SetActive(false);
 
-        TargetButtons();
+        CreateTargetButtons();
     }
 
     void Update()
@@ -107,6 +113,38 @@ public class BattleStateMachine : MonoBehaviour
             case PerformAction.PERFORMACTION:
 
                 break;
+
+            case PerformAction.CHECKALIVE:
+                if (PlayerParty.Count < 1)
+                {
+                    battleStates = PerformAction.LOSE;
+                }
+                else if (EnemyParty.Count < 1)
+                {
+                    battleStates = PerformAction.WIN;
+                }
+                else
+                {
+                    playerInput = PlayerGUI.ACTIVATE;
+                    battleStates = PerformAction.WAIT;
+                }
+                break;
+            case PerformAction.WIN:
+                PerformList.Clear();
+                foreach (GameObject alivePlayer in PlayerParty)
+                {
+                    PlayerStateMachine playerMachine = alivePlayer.GetComponent<PlayerStateMachine>();
+                    playerMachine.currentState = PlayerStateMachine.TurnState.WAITING;
+                }
+                break;
+            case PerformAction.LOSE:
+                PerformList.Clear();
+                foreach (GameObject aliveEnemy in EnemyParty)
+                {
+                    EnemyStateMachine playerMachine = aliveEnemy.GetComponent<EnemyStateMachine>();
+                    playerMachine.currentState = EnemyStateMachine.TurnState.WAITING;
+                }
+                break;
         }
 
         switch (playerInput)
@@ -134,8 +172,13 @@ public class BattleStateMachine : MonoBehaviour
         PerformList.Add(input);
     }
 
-    void TargetButtons()
+    public void CreateTargetButtons()
     {
+        foreach (GameObject button in TargetButtons)
+        {
+            Destroy(button);
+        }
+        TargetButtons.Clear();
         foreach(GameObject enemy in EnemyParty)
         {
             GameObject newButton = Instantiate(targetButton, targetSpacer);
@@ -147,6 +190,7 @@ public class BattleStateMachine : MonoBehaviour
             buttonText.text = currentEnemy.enemy.actorName;
 
             button.TargetObject = enemy;
+            TargetButtons.Add(newButton);
         }
     }
 
@@ -155,8 +199,29 @@ public class BattleStateMachine : MonoBehaviour
         PlayerChoice.Attacker = playersToManage[0].name;
         PlayerChoice.AttacksGameObject = playersToManage[0];
         PlayerChoice.Type = "Player";
+        PlayerChoice.ChosenAttack = playersToManage[0].GetComponent<PlayerStateMachine>().player.AttackList[0];
 
         AttackPanel.SetActive(false);
+        TargetPanel.SetActive(true);
+    }
+
+    public void MagicInput()
+    {
+        if (playersToManage[0].GetComponent<PlayerStateMachine>().player.knownSpells.Count > 0)
+        {
+            CreateMagicButtons();
+            PlayerChoice.Attacker = playersToManage[0].name;
+            PlayerChoice.Type = "Player";
+
+            AttackPanel.SetActive(false);
+            MagicPanel.SetActive(true);
+        }
+    }
+
+    public void SpellInput(BaseAttack chosenSpell)
+    {
+        PlayerChoice.ChosenAttack = chosenSpell;
+        MagicPanel.SetActive(false);
         TargetPanel.SetActive(true);
     }
 
@@ -170,10 +235,26 @@ public class BattleStateMachine : MonoBehaviour
     {
         PerformList.Add(PlayerChoice);
         TargetPanel.SetActive(false);
+        ClearMagicPanel();
         playersToManage[0].transform.Find("Selector").gameObject.SetActive(false);
         playersToManage.RemoveAt(0);
         playerInput = PlayerGUI.ACTIVATE;
     }
+
+    public void ClearMagicPanel()
+    {
+        foreach (GameObject button in MagicButtons)
+        {
+            Destroy(button);
+        }
+    }
+    /*public void ClearTargetPanel()
+    {
+        foreach (GameObject button in TargetButtons)
+        {
+            Destroy(button);
+        }
+    }*/
 
     void CreateAttackButtons()
     {
@@ -184,8 +265,21 @@ public class BattleStateMachine : MonoBehaviour
         //AttackButtons.Add(AttackButton);
 
         GameObject MagicButton = Instantiate(actionButton, actionSpacer);
-        TMP_Text MagicButtonText = AttackButton.transform.Find("ActionText").GetComponent<TMP_Text>();
-        AttackButtonText.text = "Magic";
-        //AttackButton.GetComponent<Button>().onClick.AddListener(() => AttackInput());
+        TMP_Text MagicButtonText = MagicButton.transform.Find("ActionText").GetComponent<TMP_Text>();
+        MagicButtonText.text = "Magic";
+        MagicButton.GetComponent<Button>().onClick.AddListener(() => MagicInput());
+    }
+
+    void CreateMagicButtons()
+    {
+        foreach (BaseAttack spell in playersToManage[0].GetComponent<PlayerStateMachine>().player.knownSpells)
+        {
+            GameObject MagicButton = Instantiate(magicButton, magicSpacer);
+            TMP_Text MagicButtonText = MagicButton.transform.Find("ActionText").GetComponent<TMP_Text>();
+            MagicButtonText.text = spell.attackName;
+            MagicAttackButton buttonScript = MagicButton.GetComponent<MagicAttackButton>();
+            buttonScript.magicAttackToPerform = spell;
+            MagicButtons.Add(MagicButton);
+        }
     }
 }

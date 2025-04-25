@@ -8,6 +8,7 @@ public class StrongSlash : BaseAttack
     {
         attackName = "Strong Slash";
         attackDescription = "Stronger Slash attack, +50% damage.";
+        attackType = StatType.PHYS;
         attackCost = 0f;
         attackDamage = 150f;
     }
